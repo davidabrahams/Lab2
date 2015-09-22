@@ -13,16 +13,6 @@ import android.widget.Button;
 public class MainActivityFragment extends Fragment
 {
 
-    Button search_button;
-    View.OnClickListener search_listener = new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View v)
-        {
-
-        }
-    };
-
     public MainActivityFragment()
     {
     }
@@ -33,16 +23,6 @@ public class MainActivityFragment extends Fragment
     {
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-
-        search_button = (Button) view.findViewById(R.id.search_button);
-        search_button.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-
-            }
-        });
 
         return view;
     }
