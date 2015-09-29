@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:imeOptions="actionSearch"
         android:inputType="text"
-        android:id="@+id/editText"/>
+        android:id="@+id/searchText"/>
 
 
 </RelativeLayout>
