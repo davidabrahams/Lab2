@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         mRequestQueue = Volley.newRequestQueue(this);
-        Log.d(DEBUG_TAG, mRequestQueue.toString());
     }
 
 

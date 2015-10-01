@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -17,15 +18,16 @@ import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 
 import org.apache.http.client.utils.URIBuilder;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -33,12 +35,14 @@ import java.net.URL;
 public class MainActivityFragment extends Fragment
 {
 
-    private static final String DEBUG_TAG = "Fragment";
+    private static final String DEBUG_TAG = "searchFragmentDebug";
+    private static final String ERROR_TAG = "searchFragmentError";
     private static final String KEY = "AIzaSyAwzWr2-QbBfR5t13eimzo19Iy9ZUAZWco";
     private static final String CX = "016507790316430451546:c67etf_pbba";
-    private EditText searchText;
 
-    private RequestQueue mRequestQueue;
+    private EditText searchText;
+    private GridViewAdapter gridViewAdapter;
+    private ArrayList<String> urls;
 
     public MainActivityFragment()
     {
@@ -59,6 +63,25 @@ public class MainActivityFragment extends Fragment
         }
     };
 
+    private Response.Listener listener = new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject response) {
+            try {
+                JSONArray images = response.getJSONArray("items");
+                String[] imgURLs = new String[images.length()];
+
+                for (int i = 0; i < imgURLs.length; i++)
+                    imgURLs[i] = images.getJSONObject(i).getString("link");
+                for (String url : imgURLs)
+                    urls.add(url);
+                Log.d(DEBUG_TAG, urls.toString());
+                gridViewAdapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                Log.e(ERROR_TAG, e.toString());;
+            }
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -67,6 +90,12 @@ public class MainActivityFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         searchText = (EditText) view.findViewById(R.id.searchText);
         searchText.setOnEditorActionListener(searchListener);
+        urls = new ArrayList<String>();
+
+        GridView gridView = (GridView) view.findViewById(R.id.gridView);
+        gridViewAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, urls);
+        gridView.setAdapter(gridViewAdapter);
+
         return view;
     }
 
@@ -74,10 +103,9 @@ public class MainActivityFragment extends Fragment
     // This function is called every time the user presses search
     private void performSearch(String search)
     {
-        URI uri = null;
-        mRequestQueue = ((MainActivity) getActivity()).getmRequestQueue();
+        RequestQueue mRequestQueue = ((MainActivity) getActivity()).getmRequestQueue();
         try {
-            uri = new URIBuilder()
+            URI uri = new URIBuilder()
                     .setScheme("https")
                     .setHost("www.googleapis.com")
                     .setPath("/customsearch/v1")
@@ -87,20 +115,11 @@ public class MainActivityFragment extends Fragment
                     .setParameter("q", search)
                     .build();
             String url = uri.toString();
-            Log.d(DEBUG_TAG, url);
-            JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
+            JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                    listener, new ErrorListener() {
                         @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d(DEBUG_TAG, "hello");
-                        }
-                    }, new ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e("ERROR", error.toString());
-
+                        public void onErrorResponse(VolleyError e) {
+                            Log.e(ERROR_TAG, e.toString());
                         }
                     });
             mRequestQueue.add(jsObjRequest);
