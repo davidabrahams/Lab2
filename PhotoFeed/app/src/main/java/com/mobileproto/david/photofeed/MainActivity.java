@@ -2,17 +2,31 @@ package com.mobileproto.david.photofeed;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 public class MainActivity extends AppCompatActivity
 {
+
+    private RequestQueue mRequestQueue;
+    private static final String DEBUG_TAG = "Activity";
+    public RequestQueue getmRequestQueue()
+    {
+        return mRequestQueue;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mRequestQueue = Volley.newRequestQueue(this);
+        Log.d(DEBUG_TAG, mRequestQueue.toString());
     }
 
 
