@@ -20,8 +20,14 @@
         android:id="@+id/searchText"/>
 
     <GridView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:columnWidth="80dp"
+        android:verticalSpacing="8dp"
+        android:horizontalSpacing="8dp"
         android:id="@+id/gridView"
         android:layout_weight="1"/>
 

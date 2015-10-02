@@ -37,7 +37,7 @@ public class MainActivityFragment extends Fragment
 
     private static final String DEBUG_TAG = "searchFragmentDebug";
     private static final String ERROR_TAG = "searchFragmentError";
-    private static final String KEY = "AIzaSyAwzWr2-QbBfR5t13eimzo19Iy9ZUAZWco";
+    private static final String KEY = "AIzaSyDYCakn7Ro2OySe2cLs1MHvVpN-x5HfO4k";
     private static final String CX = "016507790316430451546:c67etf_pbba";
 
     private EditText searchText;
@@ -68,15 +68,17 @@ public class MainActivityFragment extends Fragment
         public void onResponse(JSONObject response) {
             try {
                 JSONArray images = response.getJSONArray("items");
-                String[] imgURLs = new String[images.length()];
 
-                for (int i = 0; i < imgURLs.length; i++) {
-                    imgURLs[i] = images.getJSONObject(i).getString("link");
-                }
-                for (String url : imgURLs) {
+                String[] imgURLs = new String[images.length()];
+                for (int i = 0; i < imgURLs.length; i++)
+                    imgURLs[i] = images.getJSONObject(i).getJSONObject("image")
+                            .getString("thumbnailLink");
+
+                for (String url : imgURLs)
                     urls.add(url);
-                }
+
                 gridViewAdapter.notifyDataSetChanged();
+
             } catch (JSONException e) {
                 Log.e(ERROR_TAG, e.toString());;
             }
@@ -108,25 +110,28 @@ public class MainActivityFragment extends Fragment
         // searchText.clearFocus();
         RequestQueue mRequestQueue = ((MainActivity) getActivity()).getmRequestQueue();
         try {
-            URI uri = new URIBuilder()
-                    .setScheme("https")
-                    .setHost("www.googleapis.com")
-                    .setPath("/customsearch/v1")
-                    .setParameter("key", KEY)
-                    .setParameter("cx", CX)
-                    .setParameter("searchType", "image")
-                    .setParameter("q", search)
-                    .build();
-            String url = uri.toString();
-            JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                    listener, new ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError e) {
-                            Log.e(ERROR_TAG, e.toString());
-                        }
-                    });
-            mRequestQueue.add(jsObjRequest);
-            // mRequestQueue.add(jsObjRequest);
+            int[] startVals = {0, 11, 21};
+            for (int i : startVals) {
+                URI uri = new URIBuilder()
+                        .setScheme("https")
+                        .setHost("www.googleapis.com")
+                        .setPath("/customsearch/v1")
+                        .setParameter("key", KEY)
+                        .setParameter("cx", CX)
+                        .setParameter("searchType", "image")
+                        .setParameter("q", search)
+                        .setParameter("start", Integer.toString(i))
+                        .build();
+                String url = uri.toString();
+                JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                        listener, new ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError e) {
+                        Log.e(ERROR_TAG, e.toString());
+                    }
+                });
+                mRequestQueue.add(jsObjRequest);
+            }
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } finally {

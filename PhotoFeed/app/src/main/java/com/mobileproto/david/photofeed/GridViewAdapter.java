@@ -60,23 +60,5 @@ public class GridViewAdapter extends ArrayAdapter {
 
         return imageView;
     }
-//
-//    private static Bitmap getImageBitmap(String url)
-//    {
-//        Log.d(DEBUG_TAG, url);
-//        Bitmap bm = null;
-//        try {
-//            URL aURL = new URL(url);
-//            URLConnection conn = aURL.openConnection();
-//            conn.connect();
-//            InputStream is = conn.getInputStream();
-//            BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-//            bm = BitmapFactory.decodeStream(bis);
-//            bis.close();
-//            is.close();
-//        } catch (IOException e) {
-//            Log.e(ERROR_TAG, "Error getting bitmap", e);
-//        }
-//        return bm;
-//    }
+
 }
