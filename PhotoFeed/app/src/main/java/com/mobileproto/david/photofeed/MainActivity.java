@@ -7,7 +7,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -75,7 +74,11 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public Fragment getItem(int position) {
-            return new MainActivityFragment();
+            if (position == 0)
+                return new SearchFragment();
+            else if (position == 1)
+                return new FeedFragment();
+            return null;
         }
 
         @Override

@@ -32,7 +32,7 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment
+public class SearchFragment extends Fragment
 {
 
     private static final String DEBUG_TAG = "searchFragmentDebug";
@@ -46,7 +46,7 @@ public class MainActivityFragment extends Fragment
     private GridViewAdapter gridViewAdapter;
     private ArrayList<String> urls;
 
-    public MainActivityFragment()
+    public SearchFragment()
     {
     }
 
@@ -112,7 +112,7 @@ public class MainActivityFragment extends Fragment
         // searchText.clearFocus();
         RequestQueue mRequestQueue = ((MainActivity) getActivity()).getmRequestQueue();
         try {
-            int[] startVals = {0, 11, 21};
+            int[] startVals = {1, 11, 21};
             for (int i : startVals) {
                 URI uri = new URIBuilder()
                         .setScheme("https")
