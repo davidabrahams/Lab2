@@ -2,27 +2,18 @@ package com.mobileproto.david.photofeed;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class GridViewAdapter extends ArrayAdapter {
 
     private static final String ERROR_TAG = "adapterError";
+    private static final String DEBUG_TAG = "adapterDebug";
     private Context mContext;
     private ArrayList<String> imageURLs;
     private int layoutResourceId;
@@ -35,11 +26,11 @@ public class GridViewAdapter extends ArrayAdapter {
     }
 
     public int getCount() {
-        return 0;
+        return imageURLs.size();
     }
 
     public Object getItem(int position) {
-        return null;
+        return imageURLs.get(position);
     }
 
     public long getItemId(int position) {
@@ -61,27 +52,31 @@ public class GridViewAdapter extends ArrayAdapter {
         }
 
         String imageURL = imageURLs.get(position);
-        Bitmap bitmap = getImageBitmap(imageURL);
-        imageView.setImageBitmap(bitmap);
+
+        (new ImageBitmapGetter(imageView)).execute(imageURL);
+
+//        Bitmap bitmap = getImageBitmap(imageURL);
+//        imageView.setImageBitmap(bitmap);
 
         return imageView;
     }
-
-    private static Bitmap getImageBitmap(String url)
-    {
-        Bitmap bm = null;
-        try {
-            URL aURL = new URL(url);
-            URLConnection conn = aURL.openConnection();
-            conn.connect();
-            InputStream is = conn.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-            bm = BitmapFactory.decodeStream(bis);
-            bis.close();
-            is.close();
-        } catch (IOException e) {
-            Log.e(ERROR_TAG, "Error getting bitmap", e);
-        }
-        return bm;
-    }
+//
+//    private static Bitmap getImageBitmap(String url)
+//    {
+//        Log.d(DEBUG_TAG, url);
+//        Bitmap bm = null;
+//        try {
+//            URL aURL = new URL(url);
+//            URLConnection conn = aURL.openConnection();
+//            conn.connect();
+//            InputStream is = conn.getInputStream();
+//            BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
+//            bm = BitmapFactory.decodeStream(bis);
+//            bis.close();
+//            is.close();
+//        } catch (IOException e) {
+//            Log.e(ERROR_TAG, "Error getting bitmap", e);
+//        }
+//        return bm;
+//    }
 }

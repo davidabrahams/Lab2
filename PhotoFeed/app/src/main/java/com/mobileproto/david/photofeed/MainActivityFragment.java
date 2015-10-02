@@ -70,11 +70,12 @@ public class MainActivityFragment extends Fragment
                 JSONArray images = response.getJSONArray("items");
                 String[] imgURLs = new String[images.length()];
 
-                for (int i = 0; i < imgURLs.length; i++)
+                for (int i = 0; i < imgURLs.length; i++) {
                     imgURLs[i] = images.getJSONObject(i).getString("link");
-                for (String url : imgURLs)
+                }
+                for (String url : imgURLs) {
                     urls.add(url);
-                Log.d(DEBUG_TAG, urls.toString());
+                }
                 gridViewAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 Log.e(ERROR_TAG, e.toString());;
@@ -90,7 +91,8 @@ public class MainActivityFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         searchText = (EditText) view.findViewById(R.id.searchText);
         searchText.setOnEditorActionListener(searchListener);
-        urls = new ArrayList<String>();
+
+        urls = new ArrayList<>();
 
         GridView gridView = (GridView) view.findViewById(R.id.gridView);
         gridViewAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, urls);
@@ -103,6 +105,7 @@ public class MainActivityFragment extends Fragment
     // This function is called every time the user presses search
     private void performSearch(String search)
     {
+        // searchText.clearFocus();
         RequestQueue mRequestQueue = ((MainActivity) getActivity()).getmRequestQueue();
         try {
             URI uri = new URIBuilder()
