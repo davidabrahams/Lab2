@@ -18,6 +18,7 @@ import java.net.URLConnection;
 public class ImageBitmapGetter extends AsyncTask<String, Void, Bitmap>
 {
     private static final String ERROR_TAG = "bitmapError";
+    private static final int IMG_WIDTH = 80, IMG_HEIGHT = 80;
     private ImageView myView;
 
     public ImageBitmapGetter(ImageView view)
@@ -36,9 +37,18 @@ public class ImageBitmapGetter extends AsyncTask<String, Void, Bitmap>
             conn.connect();
             InputStream is = conn.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-            bm = BitmapFactory.decodeStream(bis);
-            bis.close();
+            BitmapFactory.Options o1 = new BitmapFactory.Options();
+            bm = BitmapFactory.decodeStream(bis, null, o1);
+            int height = o1.outHeight;
+            int width = o1.outWidth;
+            boolean isWider = (float) width / IMG_WIDTH > (float) height / IMG_HEIGHT;
+
+            if (isWider)
+                bm = Bitmap.createScaledBitmap(bm, width * IMG_HEIGHT / height, IMG_HEIGHT, false);
+            else
+                bm = Bitmap.createScaledBitmap(bm, IMG_WIDTH, height * IMG_WIDTH / width, false);
             is.close();
+
         } catch (IOException e) {
             Log.e(ERROR_TAG, "Error getting bitmap", e);
         }
