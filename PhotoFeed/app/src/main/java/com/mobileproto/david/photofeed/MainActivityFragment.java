@@ -40,6 +40,8 @@ public class MainActivityFragment extends Fragment
     private static final String KEY = "AIzaSyDYCakn7Ro2OySe2cLs1MHvVpN-x5HfO4k";
     private static final String CX = "016507790316430451546:c67etf_pbba";
 
+    private int mPageNumber;
+
     private EditText searchText;
     private GridViewAdapter gridViewAdapter;
     private ArrayList<String> urls;
