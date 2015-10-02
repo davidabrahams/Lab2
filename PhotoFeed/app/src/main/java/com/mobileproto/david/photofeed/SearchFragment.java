@@ -1,5 +1,7 @@
 package com.mobileproto.david.photofeed;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -24,7 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -41,14 +43,10 @@ public class SearchFragment extends Fragment
     private static final String CX = "016507790316430451546:c67etf_pbba";
 
     private int mPageNumber;
+    private ArrayList<String> urls;
 
     private EditText searchText;
     private GridViewAdapter gridViewAdapter;
-    private ArrayList<String> urls;
-
-    public SearchFragment()
-    {
-    }
 
     // The listener for the search text field
     private TextView.OnEditorActionListener searchListener = new TextView.OnEditorActionListener()
@@ -87,6 +85,29 @@ public class SearchFragment extends Fragment
         }
     };
 
+    private AdapterView.OnItemLongClickListener longClick = new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final boolean[] okay = {false};
+            builder.setMessage("Added image to Feed");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    ((MainActivity) getActivity()).addUrlToDb(urls.get(position));
+                }
+            });
+            builder.setNegativeButton("Undo", null);
+            builder.show();
+            return false;
+        }
+    };
+
+    public SearchFragment()
+    {
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -101,6 +122,7 @@ public class SearchFragment extends Fragment
         GridView gridView = (GridView) view.findViewById(R.id.gridView);
         gridViewAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, urls);
         gridView.setAdapter(gridViewAdapter);
+        gridView.setOnItemLongClickListener(longClick);
 
         return view;
     }
@@ -112,7 +134,7 @@ public class SearchFragment extends Fragment
         // searchText.clearFocus();
         RequestQueue mRequestQueue = ((MainActivity) getActivity()).getmRequestQueue();
         try {
-            int[] startVals = {1, 11, 21};
+            int[] startVals = {1};
             for (int i : startVals) {
                 URI uri = new URIBuilder()
                         .setScheme("https")

@@ -1,5 +1,7 @@
 package com.mobileproto.david.photofeed;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -7,11 +9,14 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -29,11 +34,17 @@ public class MainActivity extends AppCompatActivity
         return mRequestQueue;
     }
 
+    private ArrayList<String> urls;
+
+    private DatabaseHandler mDbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_slide);
+
+        mDbHelper = new DatabaseHandler(this);
 
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
@@ -86,4 +97,24 @@ public class MainActivity extends AppCompatActivity
             return NUM_PAGES;
         }
     }
+
+
+    public DatabaseHandler getmDbHelper() {
+        return mDbHelper;
+    }
+
+    public void addUrlToDb(String url)
+    {
+        Log.d(DEBUG_TAG, String.format("Added %s to Db", url));
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        ContentValues vals = new ContentValues();
+        vals.put(DatabaseHandler.FeedEntry.COLUMN_NAME_URL, url);
+
+        long newRowId;
+        newRowId = db.insert(DatabaseHandler.FeedEntry.TABLE_NAME, null, vals);
+
+    }
+
+
 }
