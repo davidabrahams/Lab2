@@ -18,7 +18,7 @@ import java.net.URLConnection;
 public class ImageBitmapGetter extends AsyncTask<String, Void, Bitmap>
 {
     private static final String ERROR_TAG = "bitmapError";
-    private static final int IMG_WIDTH = 100, IMG_HEIGHT = 100;
+    private static final int IMG_WIDTH = 80, IMG_HEIGHT = 80;
     private ImageView myView;
 
     public ImageBitmapGetter(ImageView view)
