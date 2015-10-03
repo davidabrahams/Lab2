@@ -25,6 +25,7 @@ public class FeedFragment extends Fragment {
 
     private static final String DEBUG_TAG = "feedFragmentDebug";
     private static final String ERROR_TAG = "feedFragmentError";
+    private static final String POS_KEY = "pos";
 
     private Button back, next;
     private ImageView imgView;
@@ -82,7 +83,11 @@ public class FeedFragment extends Fragment {
         next = (Button) view.findViewById(R.id.nextBtn);
         imgView = (ImageView) view.findViewById(R.id.imageView1);
         imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        pos = 0;
+
+        if (savedInstanceState == null)
+            pos = 0;
+        else
+            pos = savedInstanceState.getInt(POS_KEY);
 
         // Set the listeners
         back.setOnClickListener(backListener);
@@ -130,4 +135,12 @@ public class FeedFragment extends Fragment {
         (new ImageBitmapGetter(imgView, 500, 500)).execute(currUrl);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the current grocery list
+        savedInstanceState.putInt(POS_KEY, pos);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
 }

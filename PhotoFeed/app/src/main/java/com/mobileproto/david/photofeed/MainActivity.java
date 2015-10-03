@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity
     // This funciton adds a url to the DB, if it isn't already there.
     public void addUrlToDb(String url)
     {
-        Log.d(DEBUG_TAG, String.format("Added %s to Db", url));
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         ContentValues vals = new ContentValues();
@@ -114,7 +113,7 @@ public class MainActivity extends AppCompatActivity
 
 
         String Query = "Select * from " + DatabaseHandler.FeedEntry.TABLE_NAME + " where " +
-                DatabaseHandler.FeedEntry.COLUMN_NAME_URL + " = " + url;
+                DatabaseHandler.FeedEntry.COLUMN_NAME_URL + " = \"" + url + "\"";
         Cursor cursor = db.rawQuery(Query, null);
         if(cursor == null || cursor.getCount() <= 0) {
             long newRowId;
