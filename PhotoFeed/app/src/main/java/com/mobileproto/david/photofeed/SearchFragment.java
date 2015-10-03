@@ -55,7 +55,8 @@ public class SearchFragment extends Fragment
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
         {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH)
+            {
                 performSearch(v.getText().toString());
                 return true;
             }
@@ -65,10 +66,13 @@ public class SearchFragment extends Fragment
 
     // The listener for when a volley request comes back (Google has returned images). Adds the urls
     // to the ArrayAdapter and notifies that data has changed.
-    private Response.Listener listener = new Response.Listener<JSONObject>() {
+    private Response.Listener listener = new Response.Listener<JSONObject>()
+    {
         @Override
-        public void onResponse(JSONObject response) {
-            try {
+        public void onResponse(JSONObject response)
+        {
+            try
+            {
                 JSONArray images = response.getJSONArray("items");
 
                 String[] imgURLs = new String[images.length()];
@@ -81,21 +85,27 @@ public class SearchFragment extends Fragment
 
                 gridViewAdapter.notifyDataSetChanged();
 
-            } catch (JSONException e) {
-                Log.e(ERROR_TAG, e.toString());;
+            } catch (JSONException e)
+            {
+                Log.e(ERROR_TAG, e.toString());
+                ;
             }
         }
     };
 
     // Long click listener for adding an image to a DB
-    private AdapterView.OnItemLongClickListener longClick = new AdapterView.OnItemLongClickListener() {
+    private AdapterView.OnItemLongClickListener longClick = new AdapterView.OnItemLongClickListener()
+    {
         @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id)
+        {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("Added image to Feed");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+            {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(DialogInterface dialog, int which)
+                {
                     ((MainActivity) getActivity()).addUrlToDb(urls.get(position));
                     dialog.cancel();
                 }
@@ -135,7 +145,8 @@ public class SearchFragment extends Fragment
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
         // Save the current grocery list
         savedInstanceState.putStringArrayList(URLS_TAG, urls);
 
@@ -149,9 +160,11 @@ public class SearchFragment extends Fragment
     {
         // searchText.clearFocus();
         RequestQueue mRequestQueue = ((MainActivity) getActivity()).getmRequestQueue();
-        try {
+        try
+        {
             int[] startVals = {1, 11, 21};
-            for (int i : startVals) {
+            for (int i : startVals)
+            {
                 URI uri = new URIBuilder()
                         .setScheme("https")
                         .setHost("www.googleapis.com")
@@ -164,17 +177,21 @@ public class SearchFragment extends Fragment
                         .build();
                 String url = uri.toString();
                 JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                        listener, new ErrorListener() {
+                        listener, new ErrorListener()
+                {
                     @Override
-                    public void onErrorResponse(VolleyError e) {
+                    public void onErrorResponse(VolleyError e)
+                    {
                         Log.e(ERROR_TAG, e.toString());
                     }
                 });
                 mRequestQueue.add(jsObjRequest);
             }
-        } catch (URISyntaxException e) {
+        } catch (URISyntaxException e)
+        {
             e.printStackTrace();
-        } finally {
+        } finally
+        {
         }
     }
 }

@@ -32,7 +32,8 @@ public class ImageBitmapGetter extends AsyncTask<String, Void, Bitmap>
     protected Bitmap doInBackground(String... urls)
     {
         Bitmap bm = null;
-        try {
+        try
+        {
             // Load the image from an input stream created from a URL connection
             URL aURL = new URL(urls[0]);
             URLConnection conn = aURL.openConnection();
@@ -51,13 +52,15 @@ public class ImageBitmapGetter extends AsyncTask<String, Void, Bitmap>
 //                bm = Bitmap.createScaledBitmap(bm, myWidth, imgHeight * myWidth / imgWidth, false);
             is.close();
 
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             Log.e(ERROR_TAG, "Error getting bitmap", e);
         }
         return bm;
     }
 
-    protected void onPostExecute(Bitmap map) {
+    protected void onPostExecute(Bitmap map)
+    {
         myView.setImageBitmap(map);
     }
 }

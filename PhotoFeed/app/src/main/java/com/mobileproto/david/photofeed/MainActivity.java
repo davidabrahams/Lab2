@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
             return true;
         }
 
@@ -78,13 +79,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     // This class manages the page-sliding in this app.
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter
+    {
+        public ScreenSlidePagerAdapter(FragmentManager fm)
+        {
             super(fm);
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public Fragment getItem(int position)
+        {
             if (position == 0)
                 return new SearchFragment();
             else if (position == 1)
@@ -93,13 +97,15 @@ public class MainActivity extends AppCompatActivity
         }
 
         @Override
-        public int getCount() {
+        public int getCount()
+        {
             return NUM_PAGES;
         }
     }
 
 
-    public DatabaseHandler getmDbHelper() {
+    public DatabaseHandler getmDbHelper()
+    {
         return mDbHelper;
     }
 
@@ -115,12 +121,12 @@ public class MainActivity extends AppCompatActivity
         String Query = "Select * from " + DatabaseHandler.FeedEntry.TABLE_NAME + " where " +
                 DatabaseHandler.FeedEntry.COLUMN_NAME_URL + " = \"" + url + "\"";
         Cursor cursor = db.rawQuery(Query, null);
-        if(cursor == null || cursor.getCount() <= 0) {
+        if (cursor == null || cursor.getCount() <= 0)
+        {
             long newRowId;
             newRowId = db.insert(DatabaseHandler.FeedEntry.TABLE_NAME, null, vals);
             Log.d(DEBUG_TAG, url + " added to Database");
-        }
-        else
+        } else
             Log.d(DEBUG_TAG, url + " already in Database");
         cursor.close();
         db.close();
@@ -132,12 +138,10 @@ public class MainActivity extends AppCompatActivity
         Log.d(DEBUG_TAG, "Removing " + url + " from DB");
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         db.delete(DatabaseHandler.FeedEntry.TABLE_NAME,
-                DatabaseHandler.FeedEntry.COLUMN_NAME_URL + " = ?", new String[] { url });
+                DatabaseHandler.FeedEntry.COLUMN_NAME_URL + " = ?", new String[]{url});
         db.close();
 
     }
-
-
 
 
 }

@@ -11,7 +11,8 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 
 // This class is for managing the data in the GridView on the search page
-public class GridViewAdapter extends ArrayAdapter {
+public class GridViewAdapter extends ArrayAdapter
+{
 
     private static final String ERROR_TAG = "adapterError";
     private static final String DEBUG_TAG = "adapterDebug";
@@ -19,36 +20,43 @@ public class GridViewAdapter extends ArrayAdapter {
     private ArrayList<String> imageURLs;
     private int layoutResourceId;
 
-    public GridViewAdapter(Context c, int layoutResourceId, ArrayList data) {
+    public GridViewAdapter(Context c, int layoutResourceId, ArrayList data)
+    {
         super(c, layoutResourceId, data);
         mContext = c;
         imageURLs = data;
         this.layoutResourceId = layoutResourceId;
     }
 
-    public int getCount() {
+    public int getCount()
+    {
         return imageURLs.size();
     }
 
-    public Object getItem(int position) {
+    public Object getItem(int position)
+    {
         return imageURLs.get(position);
     }
 
-    public long getItemId(int position) {
+    public long getItemId(int position)
+    {
         return 0;
     }
 
     // create a new ImageView for each item referenced by the Adapter
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
 
         ImageView imageView;
-        if (convertView == null) {
+        if (convertView == null)
+        {
             // if it's not recycled, initialize some attributes
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             convertView = inflater.inflate(layoutResourceId, parent, false);
             imageView = (ImageView) convertView.findViewById(R.id.image);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        } else {
+        } else
+        {
             imageView = (ImageView) convertView;
         }
 

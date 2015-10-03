@@ -21,7 +21,8 @@ import java.util.ArrayList;
  * Created by david on 10/2/15. This class extends fragment, and is the representation of the user's
  * actual photo feed. It contains functionality to remove photos from the DB.
  */
-public class FeedFragment extends Fragment {
+public class FeedFragment extends Fragment
+{
 
     private static final String DEBUG_TAG = "feedFragmentDebug";
     private static final String ERROR_TAG = "feedFragmentError";
@@ -35,18 +36,22 @@ public class FeedFragment extends Fragment {
     private String currUrl;
 
     // The back button's listener. Decrement the current position and update the current photo
-    private View.OnClickListener backListener = new View.OnClickListener() {
+    private View.OnClickListener backListener = new View.OnClickListener()
+    {
         @Override
-        public void onClick(View v) {
+        public void onClick(View v)
+        {
             pos -= 1;
             updateFeed(((MainActivity) getActivity()).getmDbHelper());
         }
     };
 
     // The forward button's listener. Decrement the current position and update the current photo
-    private View.OnClickListener fwdListener = new View.OnClickListener() {
+    private View.OnClickListener fwdListener = new View.OnClickListener()
+    {
         @Override
-        public void onClick(View v) {
+        public void onClick(View v)
+        {
             pos += 1;
             updateFeed(((MainActivity) getActivity()).getmDbHelper());
         }
@@ -54,14 +59,18 @@ public class FeedFragment extends Fragment {
 
     // The long click listener on the image view. When clicked, bring up a dialog and prompts the
     // user to confirm to the image removal from the DP. Then, updates the image.
-    private View.OnLongClickListener longListener = new View.OnLongClickListener() {
+    private View.OnLongClickListener longListener = new View.OnLongClickListener()
+    {
         @Override
-        public boolean onLongClick(View v) {
+        public boolean onLongClick(View v)
+        {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("Remove image from feed?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+            {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(DialogInterface dialog, int which)
+                {
                     ((MainActivity) getActivity()).removeUrlFromDb(currUrl);
                     updateFeed(((MainActivity) getActivity()).getmDbHelper());
                     dialog.cancel();
@@ -72,6 +81,7 @@ public class FeedFragment extends Fragment {
             return false;
         }
     };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -119,11 +129,13 @@ public class FeedFragment extends Fragment {
         );
 
         // Wrap back around if we go past the length of the DB
-        if (pos >= c.getCount()) {
+        if (pos >= c.getCount())
+        {
             pos = 0;
             Log.d(DEBUG_TAG, "DB overflow. Resetting to 0");
         }
-        if (pos < 0) {
+        if (pos < 0)
+        {
             pos = c.getCount() - 1;
             Log.d(DEBUG_TAG, "DB overflow. Resetting to end");
         }
@@ -136,7 +148,8 @@ public class FeedFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
         // Save the current grocery list
         savedInstanceState.putInt(POS_KEY, pos);
 

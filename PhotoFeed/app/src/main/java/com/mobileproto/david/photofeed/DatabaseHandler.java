@@ -9,7 +9,8 @@ import android.provider.BaseColumns;
  * Created by david on 10/2/15. This is a class that contains information about the database, (which
  * columns there are, the db's name).
  */
-public class DatabaseHandler extends SQLiteOpenHelper {
+public class DatabaseHandler extends SQLiteOpenHelper
+{
 
     // All Static variables
     // Database Version
@@ -24,7 +25,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" +
                     FeedEntry._ID + " INTEGER PRIMARY KEY," +
                     FeedEntry.COLUMN_NAME_URL + TEXT_TYPE +
-            " )";
+                    " )";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
@@ -45,7 +46,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     {
     }
 
-    public static abstract class FeedEntry implements BaseColumns {
+    public static abstract class FeedEntry implements BaseColumns
+    {
         // Table name
         public static final String TABLE_NAME = "photos";
         // Contacts Table Columns names
