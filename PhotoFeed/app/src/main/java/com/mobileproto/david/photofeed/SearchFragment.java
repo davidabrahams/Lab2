@@ -42,7 +42,6 @@ public class SearchFragment extends Fragment
     private static final String KEY = "AIzaSyDYCakn7Ro2OySe2cLs1MHvVpN-x5HfO4k";
     private static final String CX = "016507790316430451546:c67etf_pbba";
 
-    private int mPageNumber;
     private ArrayList<String> urls;
 
     private EditText searchText;
@@ -89,13 +88,12 @@ public class SearchFragment extends Fragment
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            final boolean[] okay = {false};
             builder.setMessage("Added image to Feed");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
                     ((MainActivity) getActivity()).addUrlToDb(urls.get(position));
+                    dialog.cancel();
                 }
             });
             builder.setNegativeButton("Undo", null);
@@ -113,7 +111,7 @@ public class SearchFragment extends Fragment
                              Bundle savedInstanceState)
     {
 
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
         searchText = (EditText) view.findViewById(R.id.searchText);
         searchText.setOnEditorActionListener(searchListener);
 
@@ -134,7 +132,7 @@ public class SearchFragment extends Fragment
         // searchText.clearFocus();
         RequestQueue mRequestQueue = ((MainActivity) getActivity()).getmRequestQueue();
         try {
-            int[] startVals = {1};
+            int[] startVals = {1, 11, 21};
             for (int i : startVals) {
                 URI uri = new URIBuilder()
                         .setScheme("https")

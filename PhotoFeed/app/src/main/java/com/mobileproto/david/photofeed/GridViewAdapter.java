@@ -53,7 +53,7 @@ public class GridViewAdapter extends ArrayAdapter {
 
         String imageURL = imageURLs.get(position);
 
-        (new ImageBitmapGetter(imageView)).execute(imageURL);
+        (new ImageBitmapGetter(imageView, 80, 80)).execute(imageURL);
 
 //        Bitmap bitmap = getImageBitmap(imageURL);
 //        imageView.setImageBitmap(bitmap);

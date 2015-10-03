@@ -18,10 +18,10 @@ import java.net.URLConnection;
 public class ImageBitmapGetter extends AsyncTask<String, Void, Bitmap>
 {
     private static final String ERROR_TAG = "bitmapError";
-    private static final int IMG_WIDTH = 80, IMG_HEIGHT = 80;
+    private static final int myWidth = 80, myHeight = 80;
     private ImageView myView;
 
-    public ImageBitmapGetter(ImageView view)
+    public ImageBitmapGetter(ImageView view, int width, int height)
     {
         super();
         myView = view;
@@ -39,14 +39,14 @@ public class ImageBitmapGetter extends AsyncTask<String, Void, Bitmap>
             BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
             BitmapFactory.Options o1 = new BitmapFactory.Options();
             bm = BitmapFactory.decodeStream(bis, null, o1);
-            int height = o1.outHeight;
-            int width = o1.outWidth;
-            boolean isWider = (float) width / IMG_WIDTH > (float) height / IMG_HEIGHT;
+            int imgHeight = o1.outHeight;
+            int imgWidth = o1.outWidth;
+            boolean isWider = (float) imgWidth / myWidth > (float) imgHeight / myHeight;
 
             if (isWider)
-                bm = Bitmap.createScaledBitmap(bm, width * IMG_HEIGHT / height, IMG_HEIGHT, false);
+                bm = Bitmap.createScaledBitmap(bm, imgWidth * myHeight / imgHeight, myHeight, false);
             else
-                bm = Bitmap.createScaledBitmap(bm, IMG_WIDTH, height * IMG_WIDTH / width, false);
+                bm = Bitmap.createScaledBitmap(bm, myWidth, imgHeight * myWidth / imgWidth, false);
             is.close();
 
         } catch (IOException e) {

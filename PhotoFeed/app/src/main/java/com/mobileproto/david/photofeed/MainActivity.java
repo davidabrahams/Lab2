@@ -1,6 +1,7 @@
 package com.mobileproto.david.photofeed;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -34,7 +35,6 @@ public class MainActivity extends AppCompatActivity
         return mRequestQueue;
     }
 
-    private ArrayList<String> urls;
 
     private DatabaseHandler mDbHelper;
 
@@ -111,10 +111,32 @@ public class MainActivity extends AppCompatActivity
         ContentValues vals = new ContentValues();
         vals.put(DatabaseHandler.FeedEntry.COLUMN_NAME_URL, url);
 
-        long newRowId;
-        newRowId = db.insert(DatabaseHandler.FeedEntry.TABLE_NAME, null, vals);
+
+        String Query = "Select * from " + DatabaseHandler.FeedEntry.TABLE_NAME + " where " +
+                DatabaseHandler.FeedEntry.COLUMN_NAME_URL + " = " + url;
+        Cursor cursor = db.rawQuery(Query, null);
+        if(cursor == null || cursor.getCount() <= 0) {
+            long newRowId;
+            newRowId = db.insert(DatabaseHandler.FeedEntry.TABLE_NAME, null, vals);
+            Log.d(DEBUG_TAG, url + " added to Database");
+        }
+        else
+            Log.d(DEBUG_TAG, url + " already in Database");
+        cursor.close();
+        db.close();
+    }
+
+    public void removeUrlFromDb(String url)
+    {
+        Log.d(DEBUG_TAG, "Removing " + url + " from DB");
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        db.delete(DatabaseHandler.FeedEntry.TABLE_NAME,
+                DatabaseHandler.FeedEntry.COLUMN_NAME_URL + " = ?", new String[] { url });
+        db.close();
 
     }
+
+
 
 
 }
