@@ -17,28 +17,28 @@ import android.view.MenuItem;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import java.util.ArrayList;
 
+/*
+ * This class is the application's main activity. It contains the reference to the DB,
+  * a Volley request que, and has a ViewPager to allow for sliding back and forth between fragments.
+ */
 public class MainActivity extends AppCompatActivity
 {
 
     private static final int NUM_PAGES = 2;
-
     private ViewPager mPager;
-
     private PagerAdapter mPagerAdapter;
-
     private RequestQueue mRequestQueue;
+    private DatabaseHandler mDbHelper;
     private static final String DEBUG_TAG = "Activity";
+
     public RequestQueue getmRequestQueue()
     {
         return mRequestQueue;
     }
 
-
-    private DatabaseHandler mDbHelper;
-
     @Override
+    // When creating the activity, initialize a DB helper, a pager, and a request que for Volley.
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
+    // This class manages the page-sliding in this app.
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity
         return mDbHelper;
     }
 
+    // This funciton adds a url to the DB, if it isn't already there.
     public void addUrlToDb(String url)
     {
         Log.d(DEBUG_TAG, String.format("Added %s to Db", url));
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity
         db.close();
     }
 
+    // This method removes a url from the database
     public void removeUrlFromDb(String url)
     {
         Log.d(DEBUG_TAG, "Removing " + url + " from DB");

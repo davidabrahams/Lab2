@@ -32,7 +32,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 /**
- * A placeholder fragment containing a simple view.
+ * This fragment is where the user searches for images. It has a gridview for displaying the images
  */
 public class SearchFragment extends Fragment
 {
@@ -62,6 +62,8 @@ public class SearchFragment extends Fragment
         }
     };
 
+    // The listener for when a volley request comes back (Google has returned images). Adds the urls
+    // to the ArrayAdapter and notifies that data has changed.
     private Response.Listener listener = new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
@@ -84,6 +86,7 @@ public class SearchFragment extends Fragment
         }
     };
 
+    // Long click listener for adding an image to a DB
     private AdapterView.OnItemLongClickListener longClick = new AdapterView.OnItemLongClickListener() {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -111,6 +114,8 @@ public class SearchFragment extends Fragment
                              Bundle savedInstanceState)
     {
 
+        // create references to the Search and adapter, and set listeners.
+
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         searchText = (EditText) view.findViewById(R.id.searchText);
         searchText.setOnEditorActionListener(searchListener);
@@ -126,7 +131,8 @@ public class SearchFragment extends Fragment
     }
 
 
-    // This function is called every time the user presses search
+    // This function is called every time the user presses search. Send a request to the Volley que
+    // up in the MainActivity.
     private void performSearch(String search)
     {
         // searchText.clearFocus();

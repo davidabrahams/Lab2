@@ -13,7 +13,8 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * Created by david on 10/1/15.
+ * Created by david on 10/1/15. This class allows for the asynchronous loading of images into the
+ * GridView
  */
 public class ImageBitmapGetter extends AsyncTask<String, Void, Bitmap>
 {
@@ -32,6 +33,7 @@ public class ImageBitmapGetter extends AsyncTask<String, Void, Bitmap>
     {
         Bitmap bm = null;
         try {
+            // Load the image from an input stream created from a URL connection
             URL aURL = new URL(urls[0]);
             URLConnection conn = aURL.openConnection();
             conn.connect();
@@ -39,14 +41,14 @@ public class ImageBitmapGetter extends AsyncTask<String, Void, Bitmap>
             BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
             BitmapFactory.Options o1 = new BitmapFactory.Options();
             bm = BitmapFactory.decodeStream(bis, null, o1);
-            int imgHeight = o1.outHeight;
-            int imgWidth = o1.outWidth;
-            boolean isWider = (float) imgWidth / myWidth > (float) imgHeight / myHeight;
-
-            if (isWider)
-                bm = Bitmap.createScaledBitmap(bm, imgWidth * myHeight / imgHeight, myHeight, false);
-            else
-                bm = Bitmap.createScaledBitmap(bm, myWidth, imgHeight * myWidth / imgWidth, false);
+//            int imgHeight = o1.outHeight;
+//            int imgWidth = o1.outWidth;
+//            boolean isWider = (float) imgWidth / myWidth > (float) imgHeight / myHeight;
+//
+//            if (isWider)
+//                bm = Bitmap.createScaledBitmap(bm, imgWidth * myHeight / imgHeight, myHeight, false);
+//            else
+//                bm = Bitmap.createScaledBitmap(bm, myWidth, imgHeight * myWidth / imgWidth, false);
             is.close();
 
         } catch (IOException e) {

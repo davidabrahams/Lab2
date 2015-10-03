@@ -6,7 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 /**
- * Created by david on 10/2/15.
+ * Created by david on 10/2/15. This is a class that contains information about the database, (which
+ * columns there are, the db's name).
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
 
