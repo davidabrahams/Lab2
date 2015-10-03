@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
+// This class is for managing the data in the GridView on the search page
 public class GridViewAdapter extends ArrayAdapter {
 
     private static final String ERROR_TAG = "adapterError";
@@ -53,10 +54,8 @@ public class GridViewAdapter extends ArrayAdapter {
 
         String imageURL = imageURLs.get(position);
 
-        (new ImageBitmapGetter(imageView)).execute(imageURL);
-
-//        Bitmap bitmap = getImageBitmap(imageURL);
-//        imageView.setImageBitmap(bitmap);
+        // Load the image asynchronously.
+        (new ImageBitmapGetter(imageView, 80, 80)).execute(imageURL);
 
         return imageView;
     }

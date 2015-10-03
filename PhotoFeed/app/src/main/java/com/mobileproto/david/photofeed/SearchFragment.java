@@ -1,5 +1,7 @@
 package com.mobileproto.david.photofeed;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -24,31 +27,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 /**
- * A placeholder fragment containing a simple view.
+ * This fragment is where the user searches for images. It has a gridview for displaying the images
  */
 public class SearchFragment extends Fragment
 {
 
     private static final String DEBUG_TAG = "searchFragmentDebug";
     private static final String ERROR_TAG = "searchFragmentError";
+    private static final String URLS_TAG = "urls";
     private static final String KEY = "AIzaSyDYCakn7Ro2OySe2cLs1MHvVpN-x5HfO4k";
     private static final String CX = "016507790316430451546:c67etf_pbba";
 
-    private int mPageNumber;
+    private ArrayList<String> urls;
 
     private EditText searchText;
     private GridViewAdapter gridViewAdapter;
-    private ArrayList<String> urls;
-
-    public SearchFragment()
-    {
-    }
 
     // The listener for the search text field
     private TextView.OnEditorActionListener searchListener = new TextView.OnEditorActionListener()
@@ -65,6 +63,8 @@ public class SearchFragment extends Fragment
         }
     };
 
+    // The listener for when a volley request comes back (Google has returned images). Adds the urls
+    // to the ArrayAdapter and notifies that data has changed.
     private Response.Listener listener = new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
@@ -87,26 +87,64 @@ public class SearchFragment extends Fragment
         }
     };
 
+    // Long click listener for adding an image to a DB
+    private AdapterView.OnItemLongClickListener longClick = new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Added image to Feed");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((MainActivity) getActivity()).addUrlToDb(urls.get(position));
+                    dialog.cancel();
+                }
+            });
+            builder.setNegativeButton("Undo", null);
+            builder.show();
+            return false;
+        }
+    };
+
+    public SearchFragment()
+    {
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
 
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        // create references to the Search and adapter, and set listeners.
+
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
         searchText = (EditText) view.findViewById(R.id.searchText);
         searchText.setOnEditorActionListener(searchListener);
 
-        urls = new ArrayList<>();
+        if (savedInstanceState == null)
+            urls = new ArrayList<>();
+        else
+            urls = savedInstanceState.getStringArrayList(URLS_TAG);
 
         GridView gridView = (GridView) view.findViewById(R.id.gridView);
         gridViewAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, urls);
         gridView.setAdapter(gridViewAdapter);
+        gridView.setOnItemLongClickListener(longClick);
 
         return view;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the current grocery list
+        savedInstanceState.putStringArrayList(URLS_TAG, urls);
 
-    // This function is called every time the user presses search
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    // This function is called every time the user presses search. Send a request to the Volley que
+    // up in the MainActivity.
     private void performSearch(String search)
     {
         // searchText.clearFocus();
